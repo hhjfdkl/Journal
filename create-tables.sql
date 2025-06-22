@@ -25,9 +25,10 @@ CREATE TABLE "character" (
 	"sphere_id"	TEXT,
 	"employer"	TEXT,
 	"occupation"	TEXT,
+	"location"	TEXT,
 	FOREIGN KEY("sphere_id") REFERENCES "sphere"("name"),
 	PRIMARY KEY("id" AUTOINCREMENT)
-);
+)
 
 CREATE TABLE "impression" (
 	"id"	INTEGER,
