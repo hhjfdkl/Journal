@@ -1,7 +1,5 @@
 CREATE TABLE "sphere" (
 	"name"	TEXT,
-	"rating"	INTEGER,
-	CHECK(rating IN (-1, 0, 1)),
 	PRIMARY KEY("name")
 );
 
@@ -28,7 +26,7 @@ CREATE TABLE "character" (
 	"location"	TEXT,
 	FOREIGN KEY("sphere_id") REFERENCES "sphere"("name"),
 	PRIMARY KEY("id" AUTOINCREMENT)
-)
+);
 
 CREATE TABLE "impression" (
 	"id"	INTEGER,
@@ -40,7 +38,7 @@ CREATE TABLE "impression" (
 	CHECK(rating >= -5 AND rating <= 5),
 	FOREIGN KEY("event_id") REFERENCES "event"("id"),
 	FOREIGN KEY("character_id") REFERENCES "character"("id"),
-	PRIMARY KEY("id")
+	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
 CREATE TABLE "character_to_event" (
@@ -50,3 +48,18 @@ CREATE TABLE "character_to_event" (
 	FOREIGN KEY("event_id") REFERENCES "event"("id"),
 	PRIMARY KEY("event_id","character_id")
 );
+
+CREATE TRIGGER prevent_id_update BEFORE UPDATE OF id ON character
+BEGIN
+  SELECT raise(ABORT, 'Updating character.id is prohibited');
+END;
+
+CREATE TRIGGER prevent_id_update_event BEFORE UPDATE OF id ON event
+BEGIN
+  SELECT raise(ABORT, 'Updating event.id is prohibited');
+END;
+
+CREATE TRIGGER prevent_id_update_impression BEFORE UPDATE OF id ON impression
+BEGIN
+  SELECT raise(ABORT, 'Updating impression.id is prohibited');
+END;
